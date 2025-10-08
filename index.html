@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+  <title>Amazon Semantic Product Search</title>
+  <style>
+    body { font-family: Arial; background: #f5f5f5; padding: 20px; }
+    .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+    .product { margin-bottom: 15px; padding: 10px; border-bottom: 1px solid #ccc; }
+    .title { font-weight: bold; color: #2c3e50; }
+    .desc { margin: 5px 0; color: #555; }
+    .score { font-size: 0.9em; color: #888; }
+    .feedback-buttons { margin-top: 10px; }
+    .feedback-buttons form { display: inline; margin-right: 10px; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>Amazon Semantic Product Search</h2>
+  <form method="post">
+    <input type="text" name="query" placeholder="Enter your search query" style="width: 80%;" required>
+    <button type="submit">Search</button>
+  </form>
+  <hr>
+  {% for item in results %}
+    <div class="product">
+      <div class="title">{{ item.TITLE }}</div>
+      <div class="desc">{{ item.DESCRIPTION }}</div>
+      <div class="score">Similarity: {{ item.similarity | round(3) }}</div>
+      <div class="feedback-buttons">
+        <form action="/feedback" method="post">
+          <input type="hidden" name="title" value="{{ item.TITLE }}">
+          <input type="hidden" name="description" value="{{ item.DESCRIPTION }}">
+          <input type="hidden" name="vote" value="up">
+          <button type="submit">👍</button>
+        </form>
+        <form action="/feedback" method="post">
+          <input type="hidden" name="title" value="{{ item.TITLE }}">
+          <input type="hidden" name="description" value="{{ item.DESCRIPTION }}">
+          <input type="hidden" name="vote" value="down">
+          <button type="submit">👎</button>
+        </form>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+</body>
+</html>
